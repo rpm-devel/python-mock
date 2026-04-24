@@ -1,39 +1,16 @@
-%if 0%{?fedora} || 0%{?rhel} > 6
-# keeping python3 subpackage as stdlib mock lives in a different namespace
-# Some people may have not fixed their imports
-%global with_python3 1
-%endif
-
-# Not yet in Fedora buildroot
-%{!?python3_pkgversion:%global python3_pkgversion 3}
-
 %global mod_name mock
 
 Name:           python-mock
-Version:        2.0.0
-Release:        13%{?dist}
+Version:        5.2.0
+Release:        1%{?dist}
 Summary:        A Python Mocking and Patching Library for Testing
 
 License:        BSD
 URL:            http://www.voidspace.org.uk/python/%{mod_name}/
 Source0:        http://pypi.python.org/packages/source/m/%{mod_name}/%{mod_name}-%{version}.tar.gz
 
-BuildArch:      noarch
-BuildRequires:  python2-devel
-BuildRequires:  python2-setuptools
-BuildRequires:  python2-funcsigs
-#BuildRequires:  python2-pbr
-# For tests
-#BuildRequires:  python2-unittest2
-
-%if 0%{?with_python3}
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-setuptools
-#BuildRequires:  python3-pbr
-# For tests
-#BuildRequires:  python%{python3_pkgversion}-unittest2
-%endif
-
 
 %description
 Mock is a Python module that provides a core mock class. It removes the need
@@ -42,33 +19,18 @@ action, you can make assertions about which methods / attributes were used and
 arguments they were called with. You can also specify return values and set
 needed attributes in the normal way.
 
-%package -n python2-mock
+%package -n python3-mock
 Summary:        A Python Mocking and Patching Library for Testing
-%{?python_provide:%python_provide python2-%{mod_name}}
-Requires:    python2-funcsigs
-Requires:    python2-pbr
-Requires:    python2-six >= 1.9.0
+%{?python_provide:%python_provide python3-%{mod_name}}
+Requires:    python%{python3_pkgversion}-pbr
+Requires:    python%{python3_pkgversion}-six >= 1.9.0
 
-%description -n python2-mock
-Mock is a Python module that provides a core mock class. It removes the need
-to create a host of stubs throughout your test suite. After performing an
-action, you can make assertions about which methods / attributes were used and
-arguments they were called with. You can also specify return values and set
-
-%if 0%{?with_python3}
-%package -n python%{python3_pkgversion}-mock
-Summary:        A Python Mocking and Patching Library for Testing
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{mod_name}}
-Requires:    python3-pbr
-Requires:    python3-six >= 1.9.0
-
-%description -n python%{python3_pkgversion}-mock
+%description -n python3-mock
 Mock is a Python module that provides a core mock class. It removes the need
 to create a host of stubs throughout your test suite. After performing an
 action, you can make assertions about which methods / attributes were used and
 arguments they were called with. You can also specify return values and set
 needed attributes in the normal way.
-%endif
 
 
 %prep
@@ -76,41 +38,30 @@ needed attributes in the normal way.
 
 
 %build
-%{py2_build}
-%if 0%{?with_python3}
 %{py3_build}
-%endif
 
 
 %check
-%{__python2} setup.py test
-%if 0%{?with_python3}
-%{__python3} -m unittest2 discover
-%endif
+%{__python3} -m unittest discover
 
 %install
-%if 0%{?with_python3}
 %{py3_install}
-%endif
-%{py2_install}
 
 
-%files -n python2-mock
-%license LICENSE.txt
-%doc docs/*
-%{python2_sitelib}/*.egg-info
-%{python2_sitelib}/%{mod_name}
-
-%if 0%{?with_python3}
-%files -n python%{python3_pkgversion}-mock
+%files -n python3-mock
 %license LICENSE.txt
 %doc docs/*
 %{python3_sitelib}/*.egg-info
 %{python3_sitelib}/%{mod_name}
-%endif
 
 
 %changelog
+* Fri Apr 24 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 5.2.0-1
+- Update to 5.2.0
+
+* Fri Apr 24 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 2.0.0-14
+- Modernize for AlmaLinux 10: python3 only, remove obsolete spec constructs
+
 * Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.0-13
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
