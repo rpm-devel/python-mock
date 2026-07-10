@@ -5,9 +5,10 @@ Version:        5.2.0
 Release:        1%{?dist}
 Summary:        A Python Mocking and Patching Library for Testing
 
-License:        BSD
-URL:            http://www.voidspace.org.uk/python/%{mod_name}/
-Source0:        http://pypi.python.org/packages/source/m/%{mod_name}/%{mod_name}-%{version}.tar.gz
+License:        BSD-3-Clause
+URL:            https://pypi.org/project/%{mod_name}/
+ExclusiveArch:  x86_64 aarch64
+Source0:        https://pypi.io/packages/source/m/%{mod_name}/%{mod_name}-%{version}.tar.gz
 
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-setuptools
@@ -34,7 +35,7 @@ needed attributes in the normal way.
 
 
 %prep
-%setup -q -n %{mod_name}-%{version}
+%autosetup -p1 -n %{mod_name}-%{version}
 
 
 %build
@@ -56,6 +57,12 @@ needed attributes in the normal way.
 
 
 %changelog
+* Sat Jul 05 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 5.2.0-1
+- URL/Source0: http -> https (pypi.org / pypi.io); verified downloadable
+
+* Thu Jul 03 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 5.2.0-1
+- SPDX: BSD -> BSD-3-Clause; add ExclusiveArch: x86_64 aarch64; %%autosetup -p1
+
 * Fri Apr 24 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 5.2.0-1
 - Update to 5.2.0
 
